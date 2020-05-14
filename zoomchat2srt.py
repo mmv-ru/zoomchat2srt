@@ -4,7 +4,7 @@ import datetime
 import re
 import textwrap
 
-chartime = 100
+chartime = 80
 linetime = 100
 long_pause = 1000
 preshow_after_long_pause = 200
@@ -36,27 +36,16 @@ with open(file_name, 'r') as f:
       else: 
         assert starttime_obj >= last_endtime_obj , "starttime: {} lastendtime: {}".format(starttime_obj.strftime('%H:%M:%S.%f'), last_endtime_obj.strftime('%H:%M:%S.%f'))
       text_letters = len(text)
-      if text_letters > maxlen :
-        wrapped = wrapper.wrap(text)
-        for text in wrapped :
-          text_letters = len(_RE_COMBINE_WHITESPACE.sub("", text).strip())
-          endtime_obj = starttime_obj + datetime.timedelta(milliseconds=text_letters*chartime + linetime ) + extend
-          print(sub_line_num)
-          print(starttime_obj.strftime('%H:%M:%S.%f')[:-3] + ' --> ' + endtime_obj.strftime('%H:%M:%S.%f')[:-3])
-          print(str(text_letters) + ' ' + text)
-          print()
-          last_endtime_obj = endtime_obj
-          sub_line_num += 1
-          starttime_obj = endtime_obj
-          extend = datetime.timedelta(milliseconds=0)
-      else:
-        endtime_obj = starttime_obj + datetime.timedelta(milliseconds=text_letters*chartime + linetime )
+      wrapped = wrapper.wrap(text)
+      for text in wrapped :
+        text_letters = len(_RE_COMBINE_WHITESPACE.sub("", text).strip())
+        endtime_obj = starttime_obj + datetime.timedelta(milliseconds=text_letters*chartime + linetime ) + extend
         print(sub_line_num)
         print(starttime_obj.strftime('%H:%M:%S.%f')[:-3] + ' --> ' + endtime_obj.strftime('%H:%M:%S.%f')[:-3])
-        print(str(text_letters) + ' ' + text)
+        print(text)
         print()
         last_endtime_obj = endtime_obj
         sub_line_num += 1
+        starttime_obj = endtime_obj
         extend = datetime.timedelta(milliseconds=0)
-
-      src_line_num += 1
+        src_line_num += 1
